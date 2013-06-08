@@ -3,6 +3,9 @@
 #
 
 TARGET_ARCH_VARIANT_FPU := neon
+TARGET_USE_O3 := true
+TARGET_USE_GRAPHITE := true
+
 include $(BUILD_COMBOS)/arch/$(TARGET_ARCH)/armv7-a.mk
 
 ifeq ($(TARGET_ARCH_VARIANT_CPU), cortex-a15)
