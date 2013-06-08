@@ -75,7 +75,17 @@ TARGET_arm_CFLAGS := -O2 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing \
                         -Wstrict-aliasing=3 \
-                        -Werror=strict-aliasing
+                        -Werror=strict-aliasing \
+			-Wno-unused-parameter \
+			-Wno-sign-compare \
+			-Wno-reorder \
+			-Wno-pointer-arith \
+			-Wno-narrowing \
+			-Wno-enum-compare \
+			-Wno-type-limits \
+			-Wno-conversion-null \
+			-Wno-maybe-uninitialized
+
 # Modules can choose to compile some source as thumb. As
 # non-thumb enabled targets are supported, this is treated
 # as a 'hint'. If thumb is not enabled, these files are just
@@ -92,7 +102,16 @@ ifeq ($(ARCH_ARM_HAVE_THUMB_SUPPORT),true)
                         -fomit-frame-pointer \
                         -fstrict-aliasing \
                         -Wstrict-aliasing=3 \
-                        -Werror=strict-aliasing
+                        -Werror=strict-aliasing \
+			-Wno-unused-parameter \
+			-Wno-sign-compare \
+			-Wno-reorder \
+			-Wno-pointer-arith \
+			-Wno-narrowing \
+			-Wno-enum-compare \
+			-Wno-type-limits \
+			-Wno-conversion-null \
+			-Wno-maybe-uninitialized
 else
 TARGET_thumb_CFLAGS := $(TARGET_arm_CFLAGS)
 endif
