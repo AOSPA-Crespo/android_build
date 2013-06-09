@@ -84,7 +84,11 @@ TARGET_arm_CFLAGS := -O2 \
 			-Wno-enum-compare \
 			-Wno-type-limits \
 			-Wno-conversion-null \
-			-Wno-maybe-uninitialized
+			-Wno-maybe-uninitialized \
+			-Wno-write-strings \
+			-Wno-switch \
+			-Wno-format \
+			-Wno-parentheses
 
 # Modules can choose to compile some source as thumb. As
 # non-thumb enabled targets are supported, this is treated
@@ -111,7 +115,11 @@ ifeq ($(ARCH_ARM_HAVE_THUMB_SUPPORT),true)
 			-Wno-enum-compare \
 			-Wno-type-limits \
 			-Wno-conversion-null \
-			-Wno-maybe-uninitialized
+			-Wno-maybe-uninitialized \
+			-Wno-write-strings \
+			-Wno-switch \
+			-Wno-format \
+			-Wno-parentheses
 else
 TARGET_thumb_CFLAGS := $(TARGET_arm_CFLAGS)
 endif
