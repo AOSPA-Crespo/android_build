@@ -65,65 +65,46 @@ ifneq ($(wildcard $(TARGET_TOOLS_PREFIX)gcc$(HOST_EXECUTABLE_SUFFIX)),)
 endif
 
 TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
-TARGET_arm_CFLAGS := -O2 \
-                        -fgcse-after-reload \
-                        -fipa-cp-clone \
-                        -fpredictive-commoning \
-                        -fsched-spec-load \
-                        -funswitch-loops \
-                        -fvect-cost-model \
+ifeq ($(TARGET_USE_O3),true)
+TARGET_arm_CFLAGS :=    -O3 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing \
-                        -Wstrict-aliasing=3 \
+                        -funswitch-loops \
+                        -fno-tree-vectorize \
+                        -Wstrict-aliasing=2 \
                         -Werror=strict-aliasing \
-			-Wno-unused-parameter \
-			-Wno-sign-compare \
-			-Wno-reorder \
-			-Wno-pointer-arith \
-			-Wno-narrowing \
-			-Wno-enum-compare \
-			-Wno-type-limits \
-			-Wno-conversion-null \
-			-Wno-maybe-uninitialized \
-			-Wno-write-strings \
-			-Wno-switch \
-			-Wno-format \
-			-Wno-parentheses
+                        -fno-tree-vectorize \
+                        -funsafe-math-optimizations \
+                        -Wno-unused-parameter \
+                        -Wno-unused-value \
+                        -Wno-unused-function
+else
+TARGET_arm_CFLAGS :=    -O2 \
+                        -fomit-frame-pointer \
+                        -fstrict-aliasing    \
+                        -fno-zero-initialized-in-bss \
+                        -funswitch-loops
 
 # Modules can choose to compile some source as thumb. As
 # non-thumb enabled targets are supported, this is treated
 # as a 'hint'. If thumb is not enabled, these files are just
 # compiled as ARM.
 ifeq ($(ARCH_ARM_HAVE_THUMB_SUPPORT),true)
+ifeq ($(TARGET_USE_O3),true)
     TARGET_thumb_CFLAGS :=  -mthumb \
-                        -Os \
-                        -fgcse-after-reload \
-                        -fipa-cp-clone \
-                        -fpredictive-commoning \
-                        -fsched-spec-load \
-                        -funswitch-loops \
-                        -fvect-cost-model \
-                        -fomit-frame-pointer \
-                        -fstrict-aliasing \
-                        -Wstrict-aliasing=3 \
-                        -Werror=strict-aliasing \
-			-Wno-unused-parameter \
-			-Wno-sign-compare \
-			-Wno-reorder \
-			-Wno-pointer-arith \
-			-Wno-narrowing \
-			-Wno-enum-compare \
-			-Wno-type-limits \
-			-Wno-conversion-null \
-			-Wno-maybe-uninitialized \
-			-Wno-write-strings \
-			-Wno-switch \
-			-Wno-format \
-			-Wno-parentheses
+                            -O3 \
+                            -fomit-frame-pointer \
+                            -fno-strict-aliasing \
+                            -fno-tree-vectorize
+else
+    TARGET_thumb_CFLAGS :=  -mthumb \
+                            -Os \
+                            -fomit-frame-pointer \
+                            -fno-strict-aliasing
+endif
 else
 TARGET_thumb_CFLAGS := $(TARGET_arm_CFLAGS)
 endif
-
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
 # files that are normally built as thumb; this can make
@@ -146,7 +127,7 @@ TARGET_GLOBAL_CFLAGS += \
 			-fstack-protector \
 			-Wa,--noexecstack \
 			-Werror=format-security \
-			-D_FORTIFY_SOURCE=1 \
+			-D_FORTIFY_SOURCE=2 \
 			-fno-short-enums \
 			$(arch_variant_cflags)
 
